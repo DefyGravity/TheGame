@@ -1,14 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
-import javax.xml.stream.events.Characters;
 
 /**
  * Auto-generated code below aims at helping you parse the standard input
