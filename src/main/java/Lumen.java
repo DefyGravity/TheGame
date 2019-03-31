@@ -1,5 +1,4 @@
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -26,12 +25,11 @@ class Solution {
 			square.add(LINE.replaceAll("\\s", ""));
 		}
 		
-		// I only use the 2D things because it makes the code easy to read, hate their
-		// internal methods though
+		
 		Point2D.Double origin = new Point2D.Double(0, 0);
 		final char c = 'C';
 		// coords of the candles
-		final List<Double> candles = map(N, origin).filter(coord -> {
+		final List<Point2D.Double> candles = map(N, origin).filter(coord -> {
 			return c== square.get((int) coord.getY()).charAt((int) coord.getX());
 		}).collect(Collectors.toList());
 
@@ -39,7 +37,7 @@ class Solution {
 
 			return candles.parallelStream().allMatch(candle -> {
 				int distance = (int) (Point2D.distance(coord.getX(), coord.getY(), candle.getX(), candle.getY()));
-				return Integer.compare(distance, L) >= 0;
+				return distance >= L;
 			});
 		}).count();
 
@@ -53,7 +51,7 @@ class Solution {
 	 *            coords you want to start from
 	 * @return THEIR sacrificial hall
 	 */
-	private static Stream<Double> map(int N, Point2D.Double origin) {
+	private static Stream<Point2D.Double> map(int N, Point2D.Double origin) {
 		return Stream.iterate(origin, point -> {
 
 			if (((int) point.getX() + 1) % N == 0)
