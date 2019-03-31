@@ -30,25 +30,28 @@ class Solution {
 		}
 		System.err.println("==================");
 		wholeList = lowerCaseFoundWords(words, wholeList);
-		
 		wholeList = wholeList.reverse();
 		wholeList = lowerCaseFoundWords(words, wholeList);
-
 		wholeList = wholeList.reverse();
-		StringBuilder upDown = new StringBuilder();
-		transpose(h, w, wholeList, upDown);
-		upDown = lowerCaseFoundWords(words, upDown);
-		upDown = upDown.reverse();
-		upDown = lowerCaseFoundWords(words, upDown);
-		upDown = upDown.reverse();
-		wholeList = new StringBuilder();
-		transpose(h, w, upDown, wholeList);
 		StringBuilder diagonal = diagonalTranspose(h, w, wholeList);
 		diagonal = lowerCaseFoundWords(words, diagonal);
 		diagonal = diagonal.reverse();
 		diagonal = lowerCaseFoundWords(words, diagonal);
+		diagonal = diagonal.reverse();
+		wholeList = involutionDiagonal(h, w, diagonal);
+		StringBuilder upDown = transpose(h, w, wholeList);
+		upDown = lowerCaseFoundWords(words, upDown);
+		upDown = upDown.reverse();
+		upDown = lowerCaseFoundWords(words, upDown);
+		upDown = upDown.reverse();
+		diagonal = diagonalTranspose(h, w, upDown);
+		diagonal = lowerCaseFoundWords(words, diagonal);
+		diagonal = diagonal.reverse();
+		diagonal = lowerCaseFoundWords(words, diagonal);
+		diagonal = diagonal.reverse();
+		upDown = involutionDiagonal(h, w, diagonal);
+		wholeList = transpose(h, w, upDown);
 		
-		wholeList = diagonalTranspose(h,w,diagonal);
 		System.out.println(wholeList.codePoints().filter(x -> Character.isUpperCase(x))
 				.mapToObj(cp -> Character.toChars(cp))
 				.collect(StringBuilder::new, StringBuilder::append, StringBuilder::append).toString().toUpperCase());
@@ -57,10 +60,27 @@ class Solution {
 	/**
 	 * @param h
 	 * @param w
+	 * @param diagonal
+	 * @return
+	 */
+	public static StringBuilder involutionDiagonal(int h, int w, StringBuilder diagonal) {
+		StringBuilder wholeList = new StringBuilder(diagonal.length());
+		wholeList.setLength(diagonal.length());
+		int count=0;
+		while(count < w*h ) {
+			int location = (count*(w+1))% diagonal.length();
+			wholeList.replace(location, location+1, diagonal.substring(count, count+1));
+			count++;
+		}
+		return wholeList;
+	}
+	/**
+	 * @param h
+	 * @param w
 	 * @param wholeList
 	 * @return
 	 */
-	private static StringBuilder diagonalTranspose(int h, int w, StringBuilder wholeList) {
+	public static StringBuilder diagonalTranspose(int h, int w, StringBuilder wholeList) {
 		StringBuilder diagonal = new StringBuilder();
 		int count=0;
 		while(count < w*h ) {
@@ -74,14 +94,16 @@ class Solution {
 	 * @param h
 	 * @param w
 	 * @param source
-	 * @param destination
+	 * @return TODO
 	 */
-	private static void transpose(int h, int w, StringBuilder source, StringBuilder destination) {
+	public static StringBuilder transpose(int h, int w, StringBuilder source) {
+		StringBuilder destination = new StringBuilder();
 		for (int i = 0; i < w; i++) {
 			for (int j = 0; j < h; j++) {
 				destination.append(source.charAt(i + j * w));
 			}
 		}
+		return destination;
 	}
 
 	/**
@@ -89,7 +111,7 @@ class Solution {
 	 * @param linearGrid
 	 * @return
 	 */
-	private static StringBuilder lowerCaseFoundWords(List<String> words, StringBuilder linearGrid) {
+	public static StringBuilder lowerCaseFoundWords(List<String> words, StringBuilder linearGrid) {
 		for(String word:words) {
 			linearGrid = new StringBuilder(linearGrid.toString().replaceAll("(?i)"+word, word.toLowerCase()));
 		}
