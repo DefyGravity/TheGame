@@ -16,10 +16,7 @@ class Solution {
 		long r1 = in.nextLong();
 		long r2 = in.nextLong();
 		System.err.println(r1 + "," + r2);
-		final UnaryOperator<Long> unaryOperator = r -> {
-			Integer sum = String.valueOf(r).chars().map(c -> Character.getNumericValue(c)).sum();
-			return r + sum;
-		};
+		final UnaryOperator<Long> unaryOperator = riverOfDigitsFactory();
 		// infinite stream 1
 		final Stream<Long> r1Stream = Stream.iterate(r1, unaryOperator);
 		// infinite stream 2
@@ -34,5 +31,16 @@ class Solution {
 		// To debug: System.err.println("Debug messages...");
 
 		System.out.println(findFirst.get());
+	}
+
+	/**
+	 * @return
+	 */
+	public static UnaryOperator<Long> riverOfDigitsFactory() {
+		final UnaryOperator<Long> unaryOperator = r -> {
+			Integer sum = String.valueOf(r).chars().map(c -> Character.getNumericValue(c)).sum();
+			return r + sum;
+		};
+		return unaryOperator;
 	}
 }
